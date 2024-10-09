@@ -25,7 +25,7 @@ routerUser
 routerUser.route("/login").post(loginMiddlewares, sessionJWT, login);
 routerUser.route("/me").get(verifyJWT, logged);
 routerUser.route("/verify/:code").get(userVerified);
-routerUser.route("/reset_password", resetPassword);
+routerUser.route("/reset_password").post(resetPassword, emailCode);
 
 routerUser
   .route("/:id")

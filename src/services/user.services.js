@@ -16,6 +16,10 @@ const removeServices = async (id) => {
   return await User.destroy({ where: { id } });
 };
 
+const getUserByEmail = async (email) => {
+  return await User.findOne({ where: { email } });
+};
+
 const isVerifiedServices = async (id) => {
   return await User.update({ isVerified: true }, { where: { id } });
 };
@@ -27,4 +31,5 @@ module.exports = {
   updateServices,
   removeServices,
   isVerifiedServices,
+  getUserByEmail,
 };

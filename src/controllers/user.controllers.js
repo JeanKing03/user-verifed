@@ -6,6 +6,7 @@ const {
   removeServices,
   updateServices,
   isVerifiedServices,
+  getUserByEmail,
 } = require("../services/user.services");
 const {
   getUserByCode,
@@ -73,7 +74,15 @@ const userVerified = catchError(async (req, res) => {
   return res.json(user);
 });
 
-const resetPassword = catchError(async (req, res) => {});
+const resetPassword = catchError(async (req, res, next) => {
+  const { frontBaseUrl, email } = req.body;
+  const user = await getUserByEmail(email);
+  if (!user) return res.sendStatus(401);
+  const { id, firstName } = user;
+  const box = { frontBaseUrl, email, id, firstName };
+  req.box = box;
+  next();
+});
 
 module.exports = {
   getAll,
