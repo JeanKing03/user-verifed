@@ -7,6 +7,7 @@ const {
   login,
   logged,
   userVerified,
+  forgotPassword,
   resetPassword,
 } = require("../../controllers/user.controllers");
 const express = require("express");
@@ -24,9 +25,10 @@ routerUser
   .post(hashPassword, create, emailCode);
 routerUser.route("/login").post(loginMiddlewares, sessionJWT, login);
 routerUser.route("/me").get(verifyJWT, logged);
-routerUser.route("/verify/:code").get(userVerified);
-routerUser.route("/reset_password").post(resetPassword, emailCode);
+routerUser.route("/reset_password").post(forgotPassword, emailCode);
 
+routerUser.route("/reset_password/:code").post(hashPassword, resetPassword);
+routerUser.route("/verify/:code").get(userVerified);
 routerUser
   .route("/:id")
   .get(verifyJWT, getOne)

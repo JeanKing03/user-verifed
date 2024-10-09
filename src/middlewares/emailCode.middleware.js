@@ -1,5 +1,4 @@
 const { createServices } = require("../services/emailCode.services");
-const { getUserByEmail } = require("../services/user.services");
 const { sendEmail } = require("../utils/sendEmail");
 
 async function emailCode(req, res, next) {

@@ -65,16 +65,18 @@ const logged = catchError(async (req, res) => {
 
 const userVerified = catchError(async (req, res) => {
   const { code } = req.params;
+  if (!code) return res.sendStatus(401);
 
   const record = await getUserByCode(code);
   const { result, user } = record;
+  if (!user) return res.sendStatus(401);
 
   await isVerifiedServices(user.id);
   await removeCodeServices(result);
   return res.json(user);
 });
 
-const resetPassword = catchError(async (req, res, next) => {
+const forgotPassword = catchError(async (req, res, next) => {
   const { frontBaseUrl, email } = req.body;
   const user = await getUserByEmail(email);
   if (!user) return res.sendStatus(401);
@@ -82,6 +84,19 @@ const resetPassword = catchError(async (req, res, next) => {
   const box = { frontBaseUrl, email, id, firstName };
   req.box = box;
   next();
+});
+
+const resetPassword = catchError(async (req, res) => {
+  const { code } = req.params;
+
+  const record = await getUserByCode(code);
+  const { result, user } = record;
+  if (!result || !user) return res.sendStatus(401);
+  const { id } = user;
+
+  await updateServices({ password: req.hashPassword }, id);
+  await removeCodeServices(result);
+  return res.json({ message: "Password Updated" });
 });
 
 module.exports = {
@@ -93,5 +108,6 @@ module.exports = {
   login,
   logged,
   userVerified,
+  forgotPassword,
   resetPassword,
 };

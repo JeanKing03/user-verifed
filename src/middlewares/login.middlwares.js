@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const { getUserByEmail } = require("../services/user.services");
 
 async function loginMiddlewares(req, res, next) {
