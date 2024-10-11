@@ -73,7 +73,7 @@ const userVerified = catchError(async (req, res) => {
 
   await isVerifiedServices(user.id);
   await removeCodeServices(result);
-  return res.json(user);
+  return res.json({ message: "User Verified!" });
 });
 
 const forgotPassword = catchError(async (req, res, next) => {
